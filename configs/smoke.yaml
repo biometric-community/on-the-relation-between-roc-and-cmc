@@ -1,0 +1,30 @@
+paper:
+  slug: on-the-relation-between-roc-and-cmc
+  title: "ROC-CMC smoke"
+  doi: "10.1109/TBIOM.2023.3298561"
+device: cuda
+data:
+  lfw_root: ../../datasets/lfw
+  num_workers: 2
+synthetic:
+  seed: 42
+  classifiers: [cosine]
+  cases:
+    - {n: 10, m: 10, mg: 5}
+lfw:
+  enabled: true
+  min_images: 20
+  max_identities: 20
+  max_per_id: 20
+  m_samples: 10
+  eval_n: 10
+  mg: 5
+  batch_size: 32
+  lr: 0.001
+  epochs: 1
+  max_steps: 30
+paths:
+  checkpoint_dir: outputs/checkpoints
+  log_dir: outputs/logs
+  pred_dir: outputs/predictions
+  figure_dir: outputs/figures

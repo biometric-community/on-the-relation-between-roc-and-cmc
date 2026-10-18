@@ -1,0 +1,8 @@
+numpy
+scipy
+matplotlib
+pyyaml
+torch>=2.0
+torchvision>=0.15
+Pillow
+scikit-learn

@@ -1,0 +1,30 @@
+paper:
+  slug: on-the-relation-between-roc-and-cmc
+  title: "On the Relation Between ROC and CMC"
+  doi: "10.1109/TBIOM.2023.3298561"
+device: cuda
+data:
+  lfw_root: ../../datasets/lfw
+  num_workers: 2
+synthetic:
+  seed: 42
+  classifiers: [llr, cosine]
+  cases:
+    - {n: 10, m: 30, mg: 30}
+    - {n: 100, m: 20, mg: 5}
+lfw:
+  enabled: true
+  min_images: 20
+  max_identities: 100
+  max_per_id: 30
+  m_samples: 20
+  eval_n: 10
+  mg: 30
+  batch_size: 64
+  lr: 0.001
+  epochs: 10
+paths:
+  checkpoint_dir: outputs/checkpoints
+  log_dir: outputs/logs
+  pred_dir: outputs/predictions
+  figure_dir: outputs/figures
