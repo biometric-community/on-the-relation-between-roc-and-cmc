@@ -32,7 +32,7 @@ def predict_cmc_from_roc(alpha: np.ndarray, rho: np.ndarray, n: int, kernels=Non
     else:
         xs, ker = kernels
     rho_x = np.interp(xs, alpha, rho)
-    integ = getattr(np, "trapezoid", np.trapz)
+    integ = np.trapezoid if hasattr(np, "trapezoid") else np.trapz  # np.trapz is removed in NumPy 2.5
     cmc = np.ones(n, dtype=float)
     for r in range(n - 1):
         cmc[r] = float(integ(rho_x * ker[r], xs))
