@@ -21,6 +21,8 @@ def predict_cmc_from_roc(alpha: np.ndarray, rho: np.ndarray, n: int, kernels=Non
     """
     alpha = np.asarray(alpha, dtype=float)
     rho = np.asarray(rho, dtype=float)
+    order = np.argsort(alpha, kind="stable")  # np.interp needs an increasing grid
+    alpha, rho = alpha[order], rho[order]
     if alpha[0] > 0:
         alpha = np.concatenate([[0.0], alpha])
         rho = np.concatenate([[rho[0]], rho])

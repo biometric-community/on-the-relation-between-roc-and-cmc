@@ -42,3 +42,13 @@ def test_batch_prediction_matches_one_roc_at_a_time():
     assert batch.shape == (3, 6)
     for row, (a, r) in zip(batch, rocs):
         assert np.allclose(row, predict_cmc_from_roc(a, r, n=6), atol=1e-9)
+
+
+def test_unsorted_roc_points_give_the_same_cmc_as_sorted_ones():
+    alpha = np.array([0.0, 0.5, 1.0])
+    rho = np.array([0.0, 0.8, 1.0])
+    order = np.array([2, 0, 1])  # the same three points, listed out of order
+    assert np.allclose(
+        predict_cmc_from_roc(alpha[order], rho[order], n=3),
+        predict_cmc_from_roc(alpha, rho, n=3),
+    )
