@@ -8,6 +8,7 @@ import pytest
 from roc_cmc.data.synthetic import score_matrix
 from roc_cmc.metrics import empirical_cmc_closed_set, empirical_roc, predict_and_compare
 from roc_cmc.metrics.roc_cmc import average_rocs
+from roc_cmc.eval import fractional_rank_correlation
 
 
 def test_roc_of_perfectly_separated_scores_reaches_full_tmr_at_zero_fmr():
@@ -74,3 +75,11 @@ def test_prediction_comparison_reports_the_mean_absolute_gap():
     expected_gap = float(np.mean(np.abs(np.array(out["pred_cmc"]) - emp)))
     assert out["mae_pred_vs_emp_cmc"] == pytest.approx(expected_gap)
     assert len(out["global_roc_alpha"]) == len(out["global_roc_rho"]) >= 2
+
+
+def test_fractional_rank_correlation_is_one_when_the_cmc_is_linear_in_the_fractional_rank():
+    assert fractional_rank_correlation(4, [0.1, 0.4, 0.7, 1.0]) == pytest.approx(1.0)
+
+
+def test_fractional_rank_correlation_is_none_for_a_constant_cmc_instead_of_nan():
+    assert fractional_rank_correlation(4, [1.0, 1.0, 1.0, 1.0]) is None

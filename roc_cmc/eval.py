@@ -61,6 +61,20 @@ def extract_lfw_features(ckpt_path: Path, cfg, device) -> np.ndarray:
     return X
 
 
+def fractional_rank_correlation(n: int, emp_cmc) -> float | None:
+    """Pearson correlation between the fractional ranks r/n and an empirical CMC curve.
+
+    Returns None when the curve is constant, since the correlation is undefined and is not written as NaN.
+    Returns 0.0 for n < 2, as before.
+    """
+    if n < 2:
+        return 0.0
+    cmc = np.asarray(emp_cmc, dtype=float)
+    if np.all(cmc == cmc[0]):
+        return None
+    return float(np.corrcoef(fractional_ranks(n), cmc)[0, 1])
+
+
 def main(argv=None):
     p = argparse.ArgumentParser()
     p.add_argument("--config", default="configs/default.yaml")
@@ -75,9 +89,7 @@ def main(argv=None):
         rows.append({
             "n": r["n"], "classifier": r["classifier"],
             "mae": r["mae_pred_vs_emp_cmc"],
-            "frac_rank_corr": float(np.corrcoef(
-                fractional_ranks(r["n"]), np.asarray(r["emp_cmc"])
-            )[0, 1]) if r["n"] > 1 else 0.0,
+            "frac_rank_corr": fractional_rank_correlation(r["n"], r["emp_cmc"]),
         })
     out = {"synthetic_mae": rows}
 
